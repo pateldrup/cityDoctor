@@ -1,8 +1,8 @@
-🏥 CityDoctor
+##🏥 CityDoctor
 
 Helping Travelers Find Trusted Healthcare Anywhere
 
-📌 Problem Statement
+#📌 Problem Statement
 
 Travelers—both international and domestic—often face serious challenges when they fall ill in unfamiliar cities. They struggle to:
 
@@ -16,7 +16,7 @@ Access reliable medical assistance quickly
 
 This lack of clarity and accessibility can lead to stress, delays in treatment, and poor healthcare decisions.
 
-💡 Solution: CityDoctor
+#💡 Solution: CityDoctor
 
 
 CityDoctor is a platform designed to bridge this gap by helping travelers quickly connect with verified, 
@@ -24,7 +24,7 @@ CityDoctor is a platform designed to bridge this gap by helping travelers quickl
 English-speaking healthcare providers along with transparent pricing and essential details.
 
 
-🚀 Key Features
+#🚀 Key Features
 
 🔍 Search Nearby Doctors & Clinics
 
