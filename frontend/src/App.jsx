@@ -1,24 +1,19 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 import './App.css';
-import './styles/global.css';
 
 function App() {
   return (
-    <div className="app-container">
-      <header>
-        <h1>CityDoctor</h1>
-        <p>Your Health, Our Priority</p>
-      </header>
-      <main>
-        <section>
-          <h2>Welcome to CityDoctor</h2>
-          <p>The frontend structure is ready. Start building your medical platform!</p>
-        </section>
-      </main>
-      <footer>
-        <p>&copy; 2026 CityDoctor. All rights reserved.</p>
-      </footer>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+      </Routes>
+    </Router>
   );
 }
 
