@@ -2,9 +2,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #2563eb;
-  --color-primary-dark: #1d4ed8;
-  --color-secondary: #6366f1;
+  --color-primary: #006B5E;
+  --color-primary-dark: #005a4f;
+  --color-secondary: #008777;
   --color-accent: #10b981;
 }
 
@@ -16,7 +16,7 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-blue-600 text-white rounded-xl px-6 py-3 font-semibold shadow-lg shadow-blue-200 hover:bg-blue-700 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer;
+    @apply bg-primary text-white rounded-xl px-6 py-3 font-semibold shadow-lg shadow-teal-900/10 hover:bg-primary-dark hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer;
   }
 
   .glass-card {

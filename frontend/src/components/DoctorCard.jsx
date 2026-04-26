@@ -1,33 +1,54 @@
 import React from 'react';
 
-const DoctorCard = ({ name, specialty, city, costRange, languages, rating }) => {
+const DoctorCard = ({ name, specialty, costINR, costUSD, languages, rating, distance, avatar }) => {
   return (
-    <div className="glass-card p-6 flex flex-col md:flex-row gap-6 hover:border-blue-200 transition-all group">
-      <div className="w-24 h-24 bg-blue-100 rounded-2xl flex items-center justify-center text-3xl shrink-0 group-hover:scale-105 transition-transform">👨‍⚕️</div>
-      <div className="grow">
-        <div className="flex justify-between items-start mb-2">
-          <div>
-            <h3 className="text-xl font-bold text-slate-900">{name}</h3>
-            <p className="text-blue-600 font-medium">{specialty} • {city}</p>
-          </div>
-          <div className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-lg text-sm font-bold flex items-center gap-1">
-            ⭐ {rating}
-          </div>
+    <div className="bg-[#F3F6F9] rounded-[32px] p-8 mb-6 shadow-sm border border-transparent hover:border-teal-100 transition-all slide-up">
+      {/* Top Header Section: Fee and Book Now */}
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400 mb-1">Consultation Fee</p>
+          <p className="text-2xl font-black text-slate-900">
+            ₹{costINR} <span className="text-slate-400 font-medium text-lg">/ ${costUSD}</span>
+          </p>
         </div>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {languages.map(lang => (
-            <span key={lang} className="bg-slate-100 px-3 py-1 rounded-full text-xs font-semibold text-slate-600">
-              {lang}
-            </span>
-          ))}
-        </div>
-        <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-100">
-          <span className="text-slate-500 font-medium">Fee: <span className="text-slate-900 font-bold">{costRange}</span></span>
-          <button className="text-blue-600 font-bold hover:text-blue-700">View Profile →</button>
-        </div>
+        <button className="bg-[#006B5E] text-white px-8 py-3 rounded-2xl font-bold text-sm tracking-wide hover:bg-[#005a4f] transition-colors shadow-lg shadow-teal-900/10">
+          Book Now
+        </button>
       </div>
-      <div className="md:border-l border-slate-100 md:pl-6 flex items-center">
-        <button className="btn-primary w-full md:w-auto whitespace-nowrap">Book Now</button>
+
+      {/* Middle Section: Avatar and Info */}
+      <div className="flex items-center gap-6">
+        <div className="relative">
+          <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
+            <img src={avatar || `https://ui-avatars.com/name/${name}?background=0D8ABC&color=fff`} alt={name} className="w-full h-full object-cover" />
+          </div>
+          <div className="absolute bottom-1 right-1 bg-teal-500 text-white w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
+          </div>
+        </div>
+        
+        <div className="grow">
+          <div className="flex justify-between items-center mb-1">
+            <h3 className="text-2xl font-bold text-slate-900 leading-tight">{name}</h3>
+            <div className="bg-[#E2F2F0] text-[#006B5E] px-2 py-1 rounded-md text-[10px] font-black flex items-center gap-1">
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M18 10h-4V6a2 2 0 00-4 0v4H6a2 2 0 000 4h4v4a2 2 0 004 0v-4h4a2 2 0 000-4z"/></svg>
+              {rating}
+            </div>
+          </div>
+          <p className="text-[#64748B] font-medium mb-4">{specialty}</p>
+          
+          <div className="flex flex-wrap gap-2">
+            {languages.map(lang => (
+              <span key={lang} className="bg-[#E0E7FF] text-[#4338CA] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                {lang}
+              </span>
+            ))}
+            <span className="bg-[#E0E7FF] text-[#4338CA] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+              <svg className="w-3 h-3 rotate-45" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+              {distance} KM
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
