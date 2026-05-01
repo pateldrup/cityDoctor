@@ -48,7 +48,7 @@ h1, h2, h3, h4, .font-display {
 
   .glass-card {
     background: rgba(255, 255, 255, 0.7);
-    backdrop-blur: 12px;
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(195, 230, 208, 0.3);
     box-shadow: var(--shadow-soft);
     border-radius: var(--radius-card);
@@ -183,8 +183,8 @@ h1, h2, h3, h4, .font-display {
 }
 
 @keyframes progressShrink {
-  from { width: '100%'; }
-  to { width: '0%'; }
+  from { width: 100%; }
+  to { width: 0%; }
 }
 
 @keyframes toastSlideIn {
