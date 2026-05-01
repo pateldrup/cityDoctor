@@ -1,73 +1,146 @@
 import React from 'react';
-import BottomNav from '../components/BottomNav';
+import Navbar from '../components/BottomNav';
 
 const SOSPage = () => {
   return (
-    <div className="min-h-screen bg-[#FFF5F5] pb-40">
-      <header className="px-6 py-6 flex justify-between items-center bg-transparent">
-        <div className="text-[1rem] font-black tracking-tighter text-slate-800">CITYDOCTOR</div>
-        <div className="flex gap-4">
-          <button className="text-lg">🔔📍</button>
-          <div className="w-8 h-8 rounded-full bg-slate-200 overflow-hidden"><img src="https://ui-avatars.com/name/User" /></div>
+    <div className="min-h-screen bg-bgLight pb-48">
+      <header className="px-8 py-6 flex justify-between items-center bg-white border-b border-borderSoft sticky top-0 z-50">
+        <div className="text-2xl font-display font-bold tracking-tight text-primary">CityDoctor</div>
+        <div className="flex items-center gap-5">
+          <button className="text-textMuted text-lg">🔔</button>
+          <button className="text-textMuted text-lg">📍</button>
+          <div className="w-10 h-10 rounded-full border-2 border-borderSoft shadow-sm overflow-hidden bg-white">
+            <img src="https://ui-avatars.com/name/User?background=A8E063&color=1A6B3C" alt="Profile" />
+          </div>
         </div>
       </header>
 
-      <main className="px-6 flex flex-col items-center">
-        <div className="bg-[#10B981]/10 text-[#0D5C4A] px-4 py-1.5 rounded-full text-[0.6rem] font-black tracking-[0.15em] mb-8 border border-[#10B981]/20">
-          ● EMERGENCY PROTOCOL ACTIVE
+      <main className="px-8 pt-12 flex flex-col items-center max-w-5xl mx-auto">
+        {/* Emergency Badge */}
+        <div className="bg-[#FFE5E5] text-emergency px-6 py-2 rounded-full text-xs font-bold tracking-widest mb-10 border border-emergency/10 uppercase flex items-center gap-3">
+          <span className="w-2 h-2 bg-emergency rounded-full animate-pulse"></span>
+          Emergency Protocol Active
         </div>
-        <h1 className="text-3xl font-black text-slate-900 mb-2 tracking-tight text-center">Immediate Help Required?</h1>
-        <p className="text-[0.75rem] font-bold text-slate-400 text-center max-w-xs mb-16 leading-relaxed">
+
+        <h1 className="text-5xl font-display font-bold text-textMain mb-4 tracking-tight text-center max-w-xl leading-tight">
+          Immediate Help Required?
+        </h1>
+        <p className="text-base font-medium text-textMuted text-center max-w-md mb-16 leading-relaxed">
           Hold the button below for 3 seconds to alert local authorities and your insurance provider.
         </p>
 
-        <div className="relative mb-20">
-          <div className="absolute inset-0 bg-red-600/20 rounded-full animate-ping scale-150 opacity-20"></div>
-          <button className="w-56 h-56 bg-gradient-to-br from-red-500 to-rose-700 rounded-full shadow-[0_20px_50px_rgba(225,29,72,0.4)] flex flex-col items-center justify-center text-white border-[12px] border-white/20 active:scale-95 transition-all">
-            <span className="text-7xl font-bold mb-2 animate-pulse">❄️</span>
-            <span className="text-2xl font-black tracking-[0.2em]">SOS</span>
+        {/* Big SOS Button */}
+        <div className="relative mb-24 group">
+          <div className="absolute inset-0 bg-emergency/20 rounded-full blur-3xl scale-125 opacity-30 group-active:scale-150 transition-all duration-500"></div>
+          <button className="w-72 h-72 bg-emergency rounded-full shadow-[0_30px_70px_rgba(231,76,60,0.4)] flex flex-col items-center justify-center text-white border-[12px] border-white active:scale-95 transition-all cursor-pointer relative z-10">
+            <span className="text-8xl font-bold mb-0 leading-none">*</span>
+            <span className="text-3xl font-bold tracking-widest uppercase -mt-2">sos</span>
           </button>
         </div>
 
-        <div className="w-full grid grid-cols-2 gap-4 mb-8">
-          <div className="bg-white p-5 rounded-3xl shadow-lg border border-red-50">
-            <p className="text-[0.6rem] font-black text-rose-500 tracking-widest uppercase mb-4 leading-none flex items-center gap-2">🚑 Nearest Hospital</p>
-            <p className="text-[0.65rem] font-bold text-slate-500 leading-snug mb-4">Breach Candy Hospital, Mumbai</p>
-            <p className="text-[0.55rem] font-black text-rose-600 tracking-widest uppercase cursor-pointer hover:underline">START NAVIGATION →</p>
+        {/* Info Cards */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="modern-card p-8 flex flex-col items-start">
+            <div className="w-14 h-14 bg-[#FFE5E5] rounded-2xl flex items-center justify-center text-2xl mb-6">
+                <span className="text-emergency">➕</span>
+            </div>
+            <p className="text-xl font-display font-bold text-textMain mb-2">Nearest Hospital</p>
+            <p className="text-sm font-medium text-textMuted mb-8 leading-relaxed">St. Jude Medical Center • 1.2km away from your current location.</p>
+            <button className="text-sm font-bold text-emergency uppercase tracking-widest hover:underline">
+                Start Navigation →
+            </button>
           </div>
-          <div className="bg-white p-5 rounded-3xl shadow-lg border border-teal-50">
-            <p className="text-[0.6rem] font-black text-teal-600 tracking-widest uppercase mb-4 leading-none flex items-center gap-2">📞 Tourist Helpline</p>
-            <p className="text-[0.65rem] font-bold text-slate-500 leading-snug mb-4">24/7 Multilingual support</p>
-            <p className="text-[0.55rem] font-black text-teal-600 tracking-widest uppercase cursor-pointer hover:underline">CALL NOW ↑</p>
+
+          <div className="modern-card p-8 flex flex-col items-start">
+            <div className="w-14 h-14 bg-bgLight rounded-2xl flex items-center justify-center text-2xl mb-6">
+                <span className="text-primary">📞</span>
+            </div>
+            <p className="text-xl font-display font-bold text-textMain mb-2">Tourist Helpline</p>
+            <p className="text-sm font-medium text-textMuted mb-8 leading-relaxed">24/7 Multilingual support available for all international travelers.</p>
+            <button className="text-sm font-bold text-primary uppercase tracking-widest hover:underline">
+                Call Now 📱
+            </button>
           </div>
         </div>
 
-        <div className="w-full bg-[#0F172A] p-8 rounded-[2.5rem] shadow-2xl mb-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
-          <h3 className="text-white text-lg font-black mb-1">Can't explain symptoms?</h3>
-          <p className="text-white/40 text-[0.65rem] font-bold mb-8">We provide instant live visual translation.</p>
-          <div className="flex gap-2 mb-8">
-            <span className="bg-white/10 text-white px-3 py-1.5 rounded-full text-[0.6rem] font-black">English ↔ Japanese</span>
-          </div>
-          <button className="w-full bg-white text-[#0F172A] py-4 rounded-xl font-black text-xs uppercase tracking-widest active:scale-95 transition-all">CONNECT NOW</button>
+        {/* Location Section */}
+        <div className="w-full mb-16">
+            <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-display font-bold text-textMain">Your Current Location</h3>
+                <button className="w-12 h-12 modern-card flex items-center justify-center text-textMuted">
+                    <span className="text-xl">↗</span>
+                </button>
+            </div>
+            <p className="text-sm font-bold text-textMuted mb-8 tracking-wide italic">40.7128° N, 74.0060° W • Colaba, Mumbai</p>
+            
+            <div className="w-full h-64 bg-white rounded-3xl overflow-hidden relative shadow-inner border border-borderSoft">
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-emergency/5"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-[24px] border-emergency/10 rounded-full"></div>
+            </div>
+
+            <div className="flex items-center gap-4 mt-8">
+                <div className="flex -space-x-3">
+                    {[1,2,3].map(i => (
+                        <div key={i} className="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-bgLight shadow-sm">
+                            <img src={`https://ui-avatars.com/name/Responders+${i}?background=A8E063&color=1A6B3C`} alt="Avatar" />
+                        </div>
+                    ))}
+                    <div className="w-10 h-10 rounded-full border-2 border-white bg-bgLight flex items-center justify-center text-xs font-bold text-primary">
+                        +4
+                    </div>
+                </div>
+                <p className="text-sm font-medium text-textMuted italic">Nearby verified responders have been notified of your proximity.</p>
+            </div>
+        </div>
+
+        {/* Translator Banner */}
+        <div className="w-full bg-primary p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden mb-16">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+            <h3 className="text-white text-3xl font-display font-bold mb-2">Can't explain symptoms?</h3>
+            <p className="text-bgLight/60 text-base font-medium mb-12 max-w-sm">
+                Connect instantly with a live medical translator in your native language.
+            </p>
+            
+            <div className="flex items-center gap-6 mb-12">
+                <span className="text-sm font-bold text-white/80 uppercase tracking-widest border border-white/20 px-6 py-2.5 rounded-full">English</span>
+                <span className="text-white/30 text-xl">↔</span>
+                <span className="text-sm font-bold text-white/80 uppercase tracking-widest border border-white/20 px-6 py-2.5 rounded-full">Japanese</span>
+            </div>
+
+            <button className="w-full bg-white text-primary py-5 rounded-2xl font-bold text-sm uppercase tracking-widest shadow-xl hover:bg-bgLight transition-all flex items-center justify-center gap-3">
+                <span className="text-2xl">文</span> Connect Now
+            </button>
         </div>
       </main>
 
-      <div className="fixed bottom-20 left-0 right-0 px-6 z-40">
-        <div className="bg-[#10B981] p-5 rounded-[2rem] text-white flex justify-between items-center shadow-2xl shadow-teal-900/40">
-          <div className="flex gap-6 grow justify-around text-center">
-            <div><p className="text-[0.5rem] font-black opacity-60">BPM</p><p className="text-xl font-black leading-none">92</p></div>
-            <div><p className="text-[0.5rem] font-black opacity-60">SPO2</p><p className="text-xl font-black leading-none">98%</p></div>
-            <div><p className="text-[0.5rem] font-black opacity-60">TEMP</p><p className="text-xl font-black leading-none">36.5</p></div>
+      {/* Vitals Bar */}
+      <div className="fixed bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-40">
+        <div className="glass-card p-6 flex justify-between items-center border-white shadow-2xl">
+          <div className="flex gap-12 grow justify-around px-4">
+            <div className="text-center">
+                <p className="text-[0.6rem] font-bold text-textMuted uppercase mb-1 tracking-widest">BPM</p>
+                <p className="text-2xl font-bold text-emergency leading-none">92</p>
+            </div>
+            <div className="text-center">
+                <p className="text-[0.6rem] font-bold text-textMuted uppercase mb-1 tracking-widest">SPO2</p>
+                <p className="text-2xl font-bold text-primary leading-none">98%</p>
+            </div>
+            <div className="text-center">
+                <p className="text-[0.6rem] font-bold text-textMuted uppercase mb-1 tracking-widest">TEMP</p>
+                <p className="text-2xl font-bold text-textMain leading-none">36.5°</p>
+            </div>
           </div>
-          <div className="border-l border-white/20 pl-6 ml-6">
-            <p className="text-[0.45rem] font-bold leading-tight opacity-50 italic">Vitals synced from<br/>MediWatch Pro. 0h ago</p>
+          <div className="border-l border-borderSoft pl-8 ml-6 mr-4 hidden md:block">
+            <p className="text-[0.6rem] font-bold text-textMuted italic leading-tight uppercase tracking-tight">
+                Vitals synced from <br /> MediWatch Pro 12s ago
+            </p>
           </div>
         </div>
       </div>
-      <BottomNav />
     </div>
   );
 };
 
 export default SOSPage;
+
+
