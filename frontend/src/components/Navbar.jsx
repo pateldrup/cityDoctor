@@ -1,41 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
-    <nav className="sticky top-0 z-50 bg-blue-600 text-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0 flex items-center">
-            <span className="text-2xl font-bold tracking-tight">🏥 MediTravel</span>
-          </div>
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-6">
-              <a href="/" className="hover:text-blue-100 px-3 py-2 font-medium">Home</a>
-              <a href="/doctors" className="hover:text-blue-100 px-3 py-2 font-medium">Find Doctor</a>
-              <a href="/login" className="bg-white text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg font-bold">Login</a>
-              <a href="/signup" className="border border-white hover:bg-white/10 px-4 py-2 rounded-lg font-medium">Sign Up</a>
-            </div>
-          </div>
-          <div className="md:hidden">
-            <button onClick={() => setIsOpen(!isOpen)} className="inline-flex items-center justify-center p-2 rounded-md hover:bg-blue-700 outline-none">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                {isOpen ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /> 
-                       : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />}
-              </svg>
-            </button>
-          </div>
-        </div>
+    <nav className="w-full px-8 py-6 flex justify-between items-center bg-transparent">
+      <div className="text-[1.2rem] font-black tracking-tighter text-[#0F172A]">
+        CITYDOCTOR
       </div>
-      {isOpen && (
-        <div className="md:hidden bg-blue-700 px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <a href="/" className="block px-3 py-2 rounded-md font-medium hover:bg-blue-800">Home</a>
-          <a href="/doctors" className="block px-3 py-2 rounded-md font-medium hover:bg-blue-800">Find Doctor</a>
-          <a href="/login" className="block px-3 py-2 rounded-md font-medium hover:bg-blue-800">Login</a>
-          <a href="/signup" className="block px-3 py-2 rounded-md font-medium hover:bg-blue-800">Sign Up</a>
+      <div className="flex items-center gap-2 group cursor-pointer">
+        <div className="w-5 h-5 flex items-center justify-center bg-slate-200 rounded-full group-hover:bg-teal-100 transition-colors">
+          <svg className="w-3 h-3 text-slate-600 group-hover:text-[#0D5C4A]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
         </div>
-      )}
+        <span className="text-[0.7rem] font-bold text-slate-500 tracking-widest uppercase flex items-center gap-1 group-hover:text-[#0D5C4A] transition-colors">
+          English <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7"></path></svg>
+        </span>
+      </div>
     </nav>
   );
 };

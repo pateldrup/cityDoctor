@@ -1,38 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
 
-:root {
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --secondary: #6366f1;
-  --accent: #10b981;
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --card: #ffffff;
-  --card-foreground: #1e293b;
-  --border: #e2e8f0;
-  --ring: #3b82f6;
-  --radius: 0.75rem;
-
-  font-family: 'Outfit', system-ui, sans-serif;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@theme {
+  --color-primary: #006B5E;
+  --color-primary-dark: #005a4f;
+  --color-secondary: #008777;
+  --color-accent: #10b981;
 }
 
-@layer base {
-  body {
-    @apply bg-slate-50 text-slate-900;
-  }
+:root {
+  font-family: 'Outfit', system-ui, sans-serif;
+  background-color: #f8fafc;
+  color: #0f172a;
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-blue-600 text-white rounded-xl px-6 py-3 font-semibold shadow-lg shadow-blue-200 hover:bg-blue-700 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200;
+    @apply bg-primary text-white rounded-xl px-6 py-3 font-semibold shadow-lg shadow-teal-900/10 hover:bg-primary-dark hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer;
   }
 
   .glass-card {
@@ -63,8 +47,12 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-slate-100;
+  background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }

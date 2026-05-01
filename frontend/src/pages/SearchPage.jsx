@@ -1,50 +1,70 @@
-import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
-import SearchBar from '../components/SearchBar';
-import DoctorCard from '../components/DoctorCard';
-
-const MOCK_DOCTORS = [
-  { id: 1, name: "Dr. Julian Smith", specialty: "General Practitioner", city: "Paris", costRange: "$50 - $80", languages: ["English", "French"], rating: 4.9 },
-  { id: 2, name: "Dr. Elena Rodriguez", specialty: "Pediatrician", city: "Barcelona", costRange: "$60 - $100", languages: ["Spanish", "English"], rating: 4.8 },
-  { id: 3, name: "Dr. Hiroshi Tanaka", specialty: "Dentist", city: "Tokyo", costRange: "$40 - $150", languages: ["Japanese", "English"], rating: 4.7 }
-];
+import React from 'react';
+import TopNavbar from '../components/TopNavbar';
+import SearchDoctorCard from '../components/SearchDoctorCard';
+import { MOCK_DOCTORS } from '../utils/constants';
 
 const SearchPage = () => {
-  const [results, setResults] = useState(MOCK_DOCTORS);
-
-  const handleSearch = (filters) => {
-    // Basic filter logic for demonstration
-    const filtered = MOCK_DOCTORS.filter(doc => 
-      (!filters.city || doc.city === filters.city) &&
-      (!filters.specialty || doc.specialty === filters.specialty) &&
-      (!filters.language || doc.languages.includes(filters.language))
-    );
-    setResults(filtered);
-  };
+  const filters = ['Distance', 'Price', 'Language', 'Rating'];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <Navbar />
-      <div className="bg-blue-600 h-48 w-full flex items-center justify-center">
-        <h2 className="text-white text-3xl font-bold mt-[-20px]">Find Your Local Specialist</h2>
-      </div>
+    <div className="flex flex-col h-screen bg-[#F0F4F8] overflow-hidden">
+      <TopNavbar />
       
-      <div className="max-w-7xl mx-auto px-4 pb-20">
-        <SearchBar onSearch={handleSearch} />
-        
-        <div className="mt-16 space-y-6 fade-in">
-          <div className="flex justify-between items-center mb-8">
-            <h3 className="text-2xl font-bold text-slate-800">{results.length} Doctors Found</h3>
-            <span className="text-slate-500">Sorted by Rating</span>
-          </div>
+      <div className="grow flex overflow-hidden">
+        {/* Left: Map Section (Desktop Only) */}
+        <div className="hidden lg:flex w-[45%] relative bg-[#0D5C4A] overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.1]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
           
-          {results.length > 0 ? (
-            results.map(doc => <DoctorCard key={doc.id} {...doc} />)
-          ) : (
-            <div className="text-center py-20 bg-white rounded-2xl shadow-sm border border-slate-100">
-              <p className="text-slate-500 text-xl">No doctors match your search. Try different filters.</p>
+          {/* Map Pins */}
+          <div className="absolute top-[35%] left-[40%] bg-white p-1 rounded-full shadow-2xl flex items-center gap-2 pr-4 border-2 border-slate-100 slide-up">
+            <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center overflow-hidden border">
+              <img src="https://ui-avatars.com/name/Dr+Kapoor" alt="Pin" />
             </div>
-          )}
+            <span className="text-[0.65rem] font-black tracking-tight text-slate-800">Dr. Kapoor</span>
+          </div>
+
+          <div className="absolute top-[60%] left-[25%] bg-white p-1 rounded-full shadow-2xl flex items-center gap-2 pr-4 border-2 border-slate-100 slide-up delay-150">
+            <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center overflow-hidden border">
+              <img src="https://ui-avatars.com/name/Dr+Sharma" alt="Pin" />
+            </div>
+            <span className="text-[0.65rem] font-black tracking-tight text-slate-800">Dr. Sharma</span>
+          </div>
+
+          {/* Map Controls */}
+          <div className="absolute bottom-8 left-8 flex gap-3">
+            <button className="bg-white/95 backdrop-blur-sm text-slate-800 px-6 py-3 rounded-full font-black text-[0.7rem] uppercase tracking-widest shadow-2xl flex items-center gap-2 hover:bg-white">
+              <span className="text-sm">🔭</span> Satellite
+            </button>
+            <button className="bg-white/95 backdrop-blur-sm text-slate-800 px-6 py-3 rounded-full font-black text-[0.7rem] uppercase tracking-widest shadow-2xl flex items-center gap-2 hover:bg-white">
+              <span className="text-sm">📍</span> Recenter
+            </button>
+          </div>
+        </div>
+
+        {/* Right: Results Panel */}
+        <div className="grow overflow-y-auto px-6 py-8 lg:px-12 bg-white">
+          <div className="max-w-3xl mx-auto">
+            {/* Filter Row */}
+            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-6 mb-8 border-b border-slate-100">
+              <button className="bg-[#0F172A] text-white px-5 py-2 rounded-full font-black text-[0.65rem] uppercase tracking-[0.15em] flex items-center gap-2">
+                <span>⚡</span> Filters
+              </button>
+              {filters.map(filter => (
+                <button key={filter} className="border border-slate-200 text-slate-500 px-4 py-2 rounded-full font-bold text-[0.7rem] flex items-center gap-2 hover:bg-slate-50 transition-colors">
+                  {filter} <span className="text-[0.5rem]">▼</span>
+                </button>
+              ))}
+            </div>
+
+            <h2 className="text-3xl font-black text-[#0F172A] tracking-tighter mb-1">Specialists Nearby</h2>
+            <p className="text-[0.7rem] font-bold text-slate-400 uppercase tracking-widest mb-10">Found 12 doctors in Colaba, Mumbai</p>
+
+            <div className="space-y-4">
+              {MOCK_DOCTORS.map(doc => (
+                <SearchDoctorCard key={doc.id} {...doc} distance={`${(Math.random() * 2).toFixed(1)} KM`} fee={doc.consultationFee} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
