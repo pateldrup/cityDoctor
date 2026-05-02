@@ -48,7 +48,7 @@ CityDoctor is a platform designed to bridge this gap by helping travelers quickl
 - **🎥 Video Walkthrough**: [Watch on YouTube](https://youtu.be/ouEaW7kXlKA?si=5m7PE-Yg8Hm5VY6W)
 
 ### 🌐 Live Links
-- **Frontend (Live Demo)**: [https://frontend-chi-three-70.vercel.app](https://frontend-chi-three-70.vercel.app)
+- **Frontend (Live Demo)**: [https://frontend-chi-three-70.vercel.app](https://snazzy-sprinkles-0636d4.netlify.app/)
 - **Backend API**: [https://citydoctor.onrender.com](https://citydoctor.onrender.com)
 
 ## 📦 Installation
