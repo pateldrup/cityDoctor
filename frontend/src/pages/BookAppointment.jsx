@@ -52,8 +52,8 @@ const BookAppointment = () => {
   const [doctorLoading, setDoctorLoading] = useState(true);
   
   useEffect(() => {
-    import('../api/doctor.api').then(({ getDoctorByIdAPI }) => {
-      getDoctorByIdAPI(doctorId)
+    import('../api/doctor.api').then((module) => {
+      module.getDoctorByIdAPI(doctorId)
         .then(res => {
           const d = res.data.data.doctor;
           // Normalize costRange: API returns {min, max}, mock returns string
