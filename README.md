@@ -1,3 +1,4 @@
+```markdown
 # 🏥 CityDoctor
 
 Helping Travelers Find Trusted Healthcare Anywhere
@@ -79,12 +80,36 @@ Explore the UI/UX design here:
 👉 https://figma.com/design/Y0DBg2uPEGtj2sC3ePOUZ8/Untitled?node-id=9-101
 
 
+Postman collection:
+
+https://documenter.getpostman.com/view/50839316/2sBXqKofER
+
+
+live demo:
+
+
+https://snazzy-sprinkles-0636d4.netlify.app/
+
+
+video walkthrough:
+
+https://youtu.be/ouEaW7kXlKA?si=5m7PE-Yg8Hm5VY6W
+
+
+beckend walkthrough:
+
+
+https://citydoctor.onrender.com/
+
+
+
+
 
 📦 Installation
 
 # Clone the repository
 
-git clone https://github.com/your-username/citydoctor.git
+git clone https://github.com/pateldrup/cityDoctor.git
 
 # Navigate to project folder
 
@@ -110,3 +135,6 @@ npm start
 ⭐ User reviews & ratings system
 
 📲 Mobile app version
+
+ye  readme file thik de ban ke do 
+```
