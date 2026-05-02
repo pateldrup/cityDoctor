@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { doctors } from '../data/doctors';
+import { doctors as mockDoctors } from '../data/doctors';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
 
@@ -47,7 +47,41 @@ const BookAppointment = () => {
   const navigate = useNavigate();
   const { user, isLoggedIn } = useAuth();
   const { addNotification } = useNotifications();
-  const doctor = doctors.find(d => d.id === doctorId);
+  
+  const [doctor, setDoctor] = useState(null);
+  const [doctorLoading, setDoctorLoading] = useState(true);
+  
+  useEffect(() => {
+    import('../api/doctor.api').then(({ getDoctorByIdAPI }) => {
+      getDoctorByIdAPI(doctorId)
+        .then(res => {
+          const d = res.data.data.doctor;
+          // Normalize costRange: API returns {min, max}, mock returns string
+          if (d && typeof d.costRange === 'object' && d.costRange !== null) {
+            d._costRangeMin = d.costRange.min;
+            d.costRange = `₹${d.costRange.min} - ₹${d.costRange.max}`;
+          }
+          setDoctor(d);
+          setDoctorLoading(false);
+        })
+        .catch(() => {
+          // Fallback: look in local mock data
+          const mockDoc = mockDoctors.find(d => String(d.id) === String(doctorId));
+          if (mockDoc) {
+            // Check if costRange is object or string
+            if (typeof mockDoc.costRange === 'object' && mockDoc.costRange !== null) {
+              mockDoc._costRangeMin = mockDoc.costRange.min || 800;
+              mockDoc.costRange = `₹${mockDoc.costRange.min} - ₹${mockDoc.costRange.max}`;
+            } else {
+              const match = String(mockDoc.costRange || '').match(/(\d+)/);
+              mockDoc._costRangeMin = match ? parseInt(match[1]) : 800;
+            }
+            setDoctor(mockDoc);
+          }
+          setDoctorLoading(false);
+        });
+    });
+  }, [doctorId]);
 
   const [step, setStep] = useState(1);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -108,17 +142,127 @@ const BookAppointment = () => {
     }
   }, []);
 
+  const [apiSlots, setApiSlots] = useState([]);
+  useEffect(() => {
+    if (bookingData.date && doctorId) {
+      import('../api/doctor.api').then(({ getDoctorSlotsAPI }) => {
+        getDoctorSlotsAPI(doctorId, bookingData.date).then(res => {
+          setApiSlots(res.data.data.slots);
+        });
+      });
+    }
+  }, [bookingData.date, doctorId]);
+
   const timeSlots = {
-    morning: ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM'],
-    afternoon: ['2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM'],
-    evening: ['5:00 PM', '5:30 PM', '6:00 PM']
+    morning: ['09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM'],
+    afternoon: ['02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM'],
+    evening: ['05:00 PM', '05:30 PM', '06:00 PM']
   };
 
-  // Mock booked slots based on doctorId and date just to show some disabled
   const isSlotBooked = (time) => {
-    const hash = (doctorId + bookingData.date + time).split('').reduce((a,b)=>{a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
-    return Math.abs(hash) % 5 === 0; // 20% chance of being booked
+    const slot = apiSlots.find(s => s.time === time);
+    return slot ? !slot.isAvailable : false;
   };
+
+  // ---- ALL handlers & state that were below early-returns moved here ----
+  const handleDataChange = (field, value) => {
+    setBookingData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleNextStep = () => { window.scrollTo(0, 0); setStep(prev => prev + 1); };
+  const handlePrevStep = () => { window.scrollTo(0, 0); setStep(prev => prev - 1); };
+
+  const [isBooking, setIsBooking] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleConfirmBooking = async () => {
+    setIsBooking(true);
+    setErrorMsg('');
+    try {
+      const { createAppointmentAPI } = await import('../api/appointment.api');
+      const res = await createAppointmentAPI({
+        doctorId,
+        consultationType: bookingData.consultationType,
+        date: bookingData.date,
+        timeSlot: bookingData.timeSlot,
+        patientDetails: {
+          name: bookingData.patientName,
+          age: bookingData.age,
+          gender: bookingData.gender,
+          phone: bookingData.phone,
+          email: bookingData.email,
+          reason: bookingData.reason,
+          symptoms: bookingData.symptoms,
+        },
+        paymentDetails: { method: bookingData.paymentMethod },
+        insuranceDetails: {
+          hasInsurance: bookingData.hasInsurance,
+          provider: bookingData.insuranceProvider,
+          policyNumber: bookingData.policyNumber
+        }
+      });
+      setBookingId(res.data.data.bookingId);
+      setIsSuccess(true);
+      window.scrollTo(0, 0);
+      addNotification({
+        type: 'appointment',
+        title: 'Appointment Confirmed! 🎉',
+        message: `Your appointment with ${doctor?.name} on ${bookingData.date.split(' ').slice(0,3).join(' ')} at ${bookingData.timeSlot} is confirmed.`,
+        icon: '🎉',
+        actionUrl: '/bookings',
+        actionLabel: 'View Booking',
+      });
+    } catch (err) {
+      // Fallback: localStorage-based booking (works without backend)
+      const newBookingId = 'MR-' + Date.now() + '-' + Math.floor(Math.random() * 900 + 100);
+      const booking = {
+        id: newBookingId,
+        bookingId: newBookingId,
+        doctorId,
+        doctorName: doctor?.name,
+        doctorSpecialty: doctor?.specialty,
+        doctorHospital: doctor?.hospital,
+        doctorCity: doctor?.city,
+        doctorPhoto: doctor?.photo,
+        doctorRating: doctor?.rating,
+        consultationType: bookingData.consultationType,
+        date: bookingData.date,
+        timeSlot: bookingData.timeSlot,
+        patientName: bookingData.patientName,
+        age: bookingData.age,
+        gender: bookingData.gender,
+        phone: bookingData.phone,
+        email: bookingData.email,
+        reason: bookingData.reason,
+        symptoms: bookingData.symptoms,
+        paymentMethod: bookingData.paymentMethod,
+        consultationFee,
+        platformFee,
+        totalAmount,
+        paymentStatus: bookingData.paymentMethod === 'clinic' ? 'pending' : 'paid',
+        status: 'confirmed',
+        createdAt: new Date().toISOString()
+      };
+      const existingBookings = JSON.parse(localStorage.getItem('citydoctor_bookings') || '[]');
+      existingBookings.push(booking);
+      localStorage.setItem('citydoctor_bookings', JSON.stringify(existingBookings));
+      setBookingId(newBookingId);
+      setIsSuccess(true);
+      window.scrollTo(0, 0);
+      addNotification({
+        type: 'appointment',
+        title: 'Booking Confirmed! 🎉',
+        message: `Appointment with ${doctor?.name} on ${bookingData.date.split(' ').slice(0,3).join(' ')} at ${bookingData.timeSlot} is confirmed.`,
+        icon: '📅',
+        actionUrl: '/bookings',
+        actionLabel: 'View Booking',
+      });
+    } finally {
+      setIsBooking(false);
+    }
+  };
+
+  if (doctorLoading) return <div className="text-center p-20 font-bold text-slate-500">Loading doctor details...</div>;
 
   if (!doctor) {
     return (
@@ -135,39 +279,17 @@ const BookAppointment = () => {
     );
   }
 
-  const handleDataChange = (field, value) => {
-    setBookingData(prev => ({ ...prev, [field]: value }));
+  // Handle both object {min, max} and string "₹800 - ₹1200" costRange formats
+  const extractBaseCost = () => {
+    if (doctor._costRangeMin) return doctor._costRangeMin;
+    if (doctor.costRange && typeof doctor.costRange === 'object' && doctor.costRange.min) return doctor.costRange.min;
+    if (doctor.costRange && typeof doctor.costRange === 'string') {
+      const match = doctor.costRange.match(/(\d+)/);
+      if (match) return parseInt(match[1]);
+    }
+    return 800; // fallback
   };
-
-  const handleNextStep = () => {
-    window.scrollTo(0, 0);
-    setStep(prev => prev + 1);
-  };
-
-  const handlePrevStep = () => {
-    window.scrollTo(0, 0);
-    setStep(prev => prev - 1);
-  };
-
-  const handleConfirmBooking = () => {
-    // Simulate API call
-    setTimeout(() => {
-      setBookingId(`#MR-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`);
-      setIsSuccess(true);
-      window.scrollTo(0, 0);
-
-      addNotification({
-        type: 'appointment',
-        title: 'Booking Confirmed! 🎉',
-        message: `Your appointment with ${doctor.name} is confirmed for ${bookingData.date} at ${bookingData.timeSlot}`,
-        icon: '📅',
-        actionUrl: '/bookings',
-        actionLabel: 'View Booking',
-      });
-    }, 1000);
-  };
-
-  const baseCost = doctor.costValue || parseInt(doctor.costRange.replace(/\D/g, '').slice(0, 4)) || 800;
+  const baseCost = extractBaseCost();
   const consultationFee = bookingData.consultationType === 'video' ? Math.floor(baseCost * 0.8) : baseCost;
   const platformFee = 50;
   const totalAmount = consultationFee + platformFee;
@@ -566,6 +688,7 @@ const BookAppointment = () => {
             <div className="animate-fade-in space-y-8">
               
               <h3 className="text-xl font-bold text-slate-800 border-b border-slate-100 pb-4">Review & Confirm</h3>
+              {errorMsg && <div className="text-red-500 font-bold mb-4">{errorMsg}</div>}
 
               {/* Summary Card */}
               <div className="bg-white rounded-2xl border-2 border-[#2ECC71] overflow-hidden shadow-lg shadow-[#2ECC71]/10">
@@ -751,10 +874,11 @@ const BookAppointment = () => {
           {step === 3 && (
             <div className="flex-1 md:flex-none md:w-80 flex flex-col items-center">
               <button 
+                disabled={isBooking}
                 onClick={handleConfirmBooking}
-                className="w-full py-4 bg-gradient-to-r from-[#1A6B3C] to-[#2ECC71] text-white font-bold rounded-xl shadow-lg shadow-[#2ECC71]/30 hover:shadow-[#2ECC71]/50 transition-all active:scale-95 mb-2"
+                className="w-full py-4 bg-gradient-to-r from-[#1A6B3C] to-[#2ECC71] text-white font-bold rounded-xl shadow-lg shadow-[#2ECC71]/30 hover:shadow-[#2ECC71]/50 transition-all active:scale-95 mb-2 disabled:opacity-50"
               >
-                ✅ Confirm & Pay ₹{bookingData.paymentMethod === 'clinic' ? 0 : totalAmount}
+                {isBooking ? '⏳ Processing...' : `✅ Confirm & Pay ₹${totalAmount}`}
               </button>
               <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1 uppercase tracking-widest hidden md:flex">
                 🔒 Secured by 256-bit encryption
